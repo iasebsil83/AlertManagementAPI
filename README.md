@@ -41,7 +41,17 @@ Here are the requirements to **run** the project:
 
 To run the project, open a terminal in project location and write:
 ```bash
-...
+dotnet run
+```
+
+&nbsp;
+
+### Clean
+
+After execution, some debug directories and files may be created.\
+Clean them using the `clean` tool:
+```
+./clean
 ```
 
 &nbsp;
