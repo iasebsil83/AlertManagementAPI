@@ -1,5 +1,13 @@
-###
-- 
+### [2026-04-22-18-47]
+- Updated README to mention *InMemory* database management instead of the initial PostgreSQL I initially though required.
+
+- Processed the "scaffholding" technique to build other API related code.
+  Checked controler code, everything has been generated as desired: ***success***
+  Tried requests using the Swagger interface: we can create, remove, get one, or get all alerts.
+
+- Reformatted `Program.cs` (trying to understand what it does precisely).
+  Added Alert model.
+  Added the use of an *InMemory* database `AlertBase`.
 
 
 ### [2026-04-22-18-17]
