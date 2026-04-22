@@ -1,3 +1,43 @@
+###
+- 
+
+
+### [2026-04-22-18-17]
+- Added the Swagger package, following the documentation.
+  Checked it at `http://localhost:5000/swagger` to see project current state.
+  **Finally some real accurate information about our API!!**
+  We only have the **GET /Alert** request available for the moment.
+  I still don't know what is the criteria in the code that allows this request...
+  (Is it the "Get" function in our controller? Does it take the name from the return type, the controller name or the file name?)
+  Anyway, let's continue.
+
+- Added ASP.Net directory to SSL certifications:
+  ```bash
+  dotnet dev-certs https --trust #gave me the path to the dev certs directory of ASP.Net
+  export SSL_CERT_DIR="$HOME/.aspnet/dev-certs/trust:/usr/lib/ssl/certs"
+  dotnet dev-certs https --trust
+   ```
+
+- Removed useless files (`.http` & dev `appsettings.json`)
+  Checked the differences between the new tutorial template and our result: same thing.
+  Added nugget InMemory:
+  ```
+  dotnet add package Microsoft.EntityFrameworkCore.InMemory
+  ```
+
+- I couldn't find that much info so I switched on [this DotNet Guide](https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-web-api).
+  It should enable us to do the following requests:
+  ```
+  GET    /api/item      Get all items
+  GET    /api/item/{id} Get an item by ID
+  POST   /api/item      Add a new item
+  PUT    /api/item/{id} Update an existing item
+  DELETE /api/item/{id} Delete an item
+  ```
+  Let's GO!
+
+
+### [2026-04-22-17-45]
 - Struggled a bit with **DateOnly**  documentation.
   Tried the classical **DateTime**... but finally returned to DateOnly anyway.
   Using a null value for the moment.
