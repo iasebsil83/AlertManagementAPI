@@ -21,7 +21,6 @@ namespace AlertManagementAPI.Controllers {
 
         //attributes
         private readonly AlertContext _context;
-        private                   int   lastID = 0; //hinder ID reuse
 
 
 
@@ -56,17 +55,19 @@ namespace AlertManagementAPI.Controllers {
 
         // PUT: api/Alert/#ID#
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{oldId}")]
         public async Task<IActionResult> PutAlert(int oldID, Alert newAlert) {
 
             //get original target
             var oldAlert = await _context.Alerts.FindAsync(oldID);
             if(oldAlert == null){ return NotFound(); }
 
+            //immutable values
+            newAlert.ID        = oldID;
+            newAlert.CreatedAt = oldAlert.CreatedAt;
+
             //incorrect modification
             if(
-                newAlert.ID        != oldID              || //ID        is immutable
-                newAlert.CreatedAt != oldAlert.CreatedAt || //createdAt is immutable
                 (
                     (newAlert.Message != oldAlert.Message || newAlert.Area != oldAlert.Area) && //different content (message/area)
                     oldAlert.Status != STATUS.DRAFT                                             //forbidden case: if !DRAFT
@@ -104,19 +105,20 @@ namespace AlertManagementAPI.Controllers {
         [HttpPost]
         public async Task<ActionResult<Alert>> PostAlert(Alert alert) {
 
+            //get latest ID available
+            int lastID = _context.Alerts.Count();
+
 			//set initial attributes
-            alert.ID        = lastID++;
+            alert.ID        = lastID + 1;
             alert.Status    = STATUS.DRAFT;
             alert.CreatedAt = DateOnly.FromDateTime(DateTime.Now);
-
-            Console.WriteLine($"ADDING WITH NEW ID:{alert.ID}");
 
             //add a new alert
             _context.Alerts.Add(alert);
             await _context.SaveChangesAsync();
 
             //feedback
-            return CreatedAtAction("GetAlert", alert);
+            return CreatedAtAction("GetAlert", new { id = alert.ID }, alert);
         }
 
 

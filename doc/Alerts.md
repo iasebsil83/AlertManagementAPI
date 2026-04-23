@@ -60,19 +60,19 @@ There are 5 kinds of request you can operate with alerts:
 
 ### Get all alerts
 
-To get all alerts, use a **GET** with URL path suffix `/alert`.
+To get all alerts, use a **GET** with URL path suffix `/api/Alert`.
 
 &nbsp;
 
 ### Get an individual alert by ID
 
-To get a specific alert by id, use a **GET** with URL path suffix `/alert/#id#`.
+To get a specific alert by id, use a **GET** with URL path suffix `/api/Alert/#id#`.
 
 &nbsp;
 
 ### Create an alert
 
-To get a specific alert by id, use a **POST** with URL path suffix `/alert` and the following headers:
+To get a specific alert by id, use a **POST** with URL path suffix `/api/Alert` and the following headers:
 - id
 - message
 - status
@@ -84,7 +84,7 @@ They are all optional and the API will override the values that are not the be s
 
 ### Modify an individual alert by ID
 
-To modify a specific alert by id, use a **PUT** with URL path suffix `/alert/#id#` and the following headers:
+To modify a specific alert by id, use a **PUT** with URL path suffix `/api/Alert/#id#` and the following headers:
 - id
 - message
 - status
@@ -97,7 +97,7 @@ They are all optional but the API may refuse some modifications depending on the
 ### Delete an individual alert by ID
 
 
-To delete a specific alert by id, use a **DELETE** with URL path suffix `/alert/#id#`.
+To delete a specific alert by id, use a **DELETE** with URL path suffix `/api/Alert/#id#`.
 
 &nbsp;
 

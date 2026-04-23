@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#uncomment for more debug info
+#DEBUG='-vvv'
+
+#args
+request=$1
+id=$2
+body=$3
+
+#with or without ID
+if [[ $id == '-' ]]; then id=''; else id="/$id"; fi
+
+#with body
+if [[ -n $body ]]; then body='-d '$body; fi
+
+#run curl
+curl $DEBUG \
+    -X $request \
+    http://localhost:5000/api/Alert$id \
+    -H 'accept: text/plain' -H 'Content-Type: application/json' \
+    $body
+echo

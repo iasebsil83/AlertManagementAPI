@@ -1,12 +1,83 @@
-### [2026-04-22-11-21]
-- Wrote the modification rules in PUT.
-  Wrote overriding statements in POST.
-  Tested POST: OK
-  Tested PUT: **Something is wrong with IDs.**
-  When making specific requests, our custom *Alert* attribute makes interference with internal IDs provided as primary key in our InMemory database.
+### [2026-04-23-13-44]
+- Added a few tests commands in a `tst` directory.
+
+- Tested if DELETE causes problem with ID: **it does**
+  Primary keys are never reset, but our instances do reset every time...
+  It is **very annoying**!!! How are we supposed to work with such an environment!
+  Anyway, I also figured out that PUT requests were having the same kind of "ID" issue.
+  => Too much pain for getting information about this **mysterious** `InMemory` database => stopping project here.
+
+
+### [2026-04-23-11-50]
+- Note that the swagger doesn't allow us to send specific ID requests (form issue), but otherwise regular CURL works.
+
+- **Found more information.**\
+  The previous `_context.Alerts.Add()` don't want an Alert of ID 0, so it sets it to 1 anyway.\
+  **BUT, it doesn't affect our ID otherwise!!!**\
+  Which means, we <ins>**still**</ins> have to secure the ID attribution process, because in the current situation:
+  - POSTing 2 times the same ID causes an internal memory error (same primary key for 2 elements).
+  - We can POST whatever ID we want... can quickly become messy.\
+  **HOWEVER**, we also saw another issue.\
+  `lastID` is reset at each **POST** request (=> new instanciation of controller at each request...).\
+  So, **we can't rely on controller attributes**.\
+  Same thing for the **Model** instance (tried to set lastID in it), which means even the `_context` is reloaded every time.\
+  => Therefore, let's rely on the number of stored Alerts to get the lastID.
+  => **Pretty sure we will have problem when deleting something!**
+
+- **Found where the issue with the ID occurs.**\
+  There is **no** default ID management in InMemory database.\
+  The first attribute we define is used as primary key (I couldn't find any information about it in .NET documentations, but anyway).\
+  Our ID attribution mechanism works, but it oppose to the InMemory <ins>addition</ins> in the **POST** request.\
+  Here is the POST content concerned:
+  ```C#
+  //set initial attributes
+  Console.WriteLine($"ALERT_ID:{alert.ID}");
+  Console.WriteLine($"LAST_ID:{lastID}");
+  Console.WriteLine("OPERATE");
+  alert.ID        = lastID++;
+  Console.WriteLine($"ALERT_ID:{alert.ID}");
+  Console.WriteLine($"LAST_ID:{lastID}");
+  alert.Status    = STATUS.DRAFT;
+  alert.CreatedAt = DateOnly.FromDateTime(DateTime.Now);
+
+  //add a new alert
+  Console.WriteLine("ADD");
+  _context.Alerts.Add(alert);
+  Console.WriteLine($"ALERT_ID:{alert.ID}");
+  Console.WriteLine($"LAST_ID:{lastID}");
+  Console.WriteLine("SAVE");
+  await _context.SaveChangesAsync();
+  Console.WriteLine($"ALERT_ID:{alert.ID}");
+  Console.WriteLine($"LAST_ID:{lastID}");
+  ```
+  And here the output:
+  ```
+  ALERT_ID:8  <--- here it can be anything (user input)
+  LAST_ID:0   <--- lastId init at 0
+  OPERATE
+  ALERT_ID:0  <--- lastId set in Alert object (overwrite)
+  LAST_ID:1   <--- and then increased (until here, everything is OK)
+  ADD
+  ALERT_ID:1  <--- MODIFICATION IN THE Alert OBJECT !!!!
+  LAST_ID:1   <--- and our custom lastId is not updated!
+  SAVE
+  info: Microsoft.EntityFrameworkCore.Update[30100]
+        Saved 1 entities to in-memory store.
+  ALERT_ID:1  <--- No modification after save: good
+  LAST_ID:1
+  ```
+  The issue is that `_context.Alerts.Add()` **modifies** the ID we give him.
+
+
+### [2026-04-23-11-21]
+- Wrote the modification rules in PUT.\
+  Wrote overriding statements in POST.\
+  Tested POST: OK\
+  Tested PUT: **Something is wrong with IDs.**\
+  When making specific requests, our custom *Alert* attribute makes interference with internal IDs provided as primary key in our InMemory database.\
   => **Maybe remove our custom ID attribute and only rely on the internal one**
 
-- Fixed the README for real (I forgot actually).
+- Fixed the README for real (I forgot actually).\
   Made FULL DOCUMENTATION about the Alerts API: `doc/Alerts.md`
 
 - Reading generated code to see how it works.\

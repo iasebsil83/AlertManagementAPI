@@ -8,6 +8,6 @@ public class AlertContext : DbContext {
     public AlertContext(DbContextOptions<AlertContext> options) : base(options) {
     }
 
-    //alert list
+    //attributes
     public DbSet<Alert> Alerts { get; set; } = null!;
 }

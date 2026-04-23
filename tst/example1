@@ -1,0 +1,9 @@
+# Instead of doing the full CURL, run
+tst/run    GET -
+tst/run   POST - '{"id":5,"message":"hey","area":"j","status":1,"createdAt":"2020-12-02"}'
+tst/run   POST - '{"id":2,"message":"yow","area":"i","status":2,"createdAt":"2000-02-20"}'
+tst/run   POST - '{"id":2,"message":"ahf","area":"k","status":0,"createdAt":"2010-03-01"}'
+tst/run    GET 1
+tst/run    GET 2
+tst/run    PUT 2 '{"message":"justTheMessage"}'
+tst/run    GET 2
