@@ -13,7 +13,7 @@
 This project is a web API for exchanging custom items that we call **alerts**.\
 Alerts are specific data structures, stored and retrieved from a local database.
 
-This project is made exclusively using [.NET](https://dotnet.microsoft.com/en-us) in C# and rely on a [postgresq](https://www.postgresql.org) database.
+This project is made exclusively using [.NET](https://dotnet.microsoft.com/en-us) in C# and rely on an *InMemory* Database.
 
 &nbsp;
 
@@ -27,13 +27,12 @@ This project produces no downloadable binaries yet.
 
 
 
-## Execution
+## Use
 
 ### Execution requirements
 
 Here are the requirements to **run** the project:
 - [.NET](https://dotnet.microsoft.com/en-us), version 10.0
-- [postgresq](https://www.postgresql.org), version X
 
 &nbsp;
 
@@ -55,6 +54,12 @@ Clean them using the `clean` tool:
 ```
 
 &nbsp;
+
+### Usage
+
+For precise usage of the API in itself, see document(s) in the `doc/` directory.
+
+&nbsp;
 &nbsp;
 
 
@@ -70,18 +75,6 @@ No build process, everything is directly handled by the DotNet SDK.
 ### Build process
 
 No build process.
-&nbsp;
-&nbsp;
-
-
-
-
-## Additional Information
-
-### ...
-
-...
-
 &nbsp;
 &nbsp;
 

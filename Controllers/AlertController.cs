@@ -8,100 +8,137 @@ using Microsoft.EntityFrameworkCore;
 using AlertManagementAPI;
 using AlertManagementAPI.Models;
 
-namespace AlertManagementAPI.Controllers
-{
+namespace AlertManagementAPI.Controllers {
+
+
+
+    //alerts
     [Route("api/[controller]")]
     [ApiController]
-    public class AlertController : ControllerBase
-    {
-        private readonly AlertContext _context;
+    public class AlertController : ControllerBase {
 
-        public AlertController(AlertContext context)
-        {
-            _context = context;
+
+
+        //attributes
+        private readonly AlertContext _context;
+        private                   int   lastID = 0; //hinder ID reuse
+
+
+
+        //init
+        public AlertController(AlertContext context) {
+            _context = context; //bind context for internal use
         }
+
+
 
         // GET: api/Alert
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Alert>>> GetAlerts()
-        {
-            return await _context.Alerts.ToListAsync();
+        public async Task<ActionResult<IEnumerable<Alert>>> GetAlerts() {
+            return await _context.Alerts.ToListAsync(); //every alert
         }
 
-        // GET: api/Alert/5
+
+
+        // GET: api/Alert/#ID#
         [HttpGet("{id}")]
-        public async Task<ActionResult<Alert>> GetAlert(int id)
-        {
+        public async Task<ActionResult<Alert>> GetAlert(int id) {
+
+            //get by ID
             var alert = await _context.Alerts.FindAsync(id);
 
-            if (alert == null)
-            {
-                return NotFound();
-            }
-
+            //not found
+            if (alert == null) { return NotFound(); }
             return alert;
         }
 
-        // PUT: api/Alert/5
+
+
+        // PUT: api/Alert/#ID#
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAlert(int id, Alert alert)
-        {
-            if (id != alert.ID)
-            {
-                return BadRequest();
-            }
+        public async Task<IActionResult> PutAlert(int oldID, Alert newAlert) {
 
-            _context.Entry(alert).State = EntityState.Modified;
+            //get original target
+            var oldAlert = await _context.Alerts.FindAsync(oldID);
+            if(oldAlert == null){ return NotFound(); }
 
-            try
-            {
+            //incorrect modification
+            if(
+                newAlert.ID        != oldID              || //ID        is immutable
+                newAlert.CreatedAt != oldAlert.CreatedAt || //createdAt is immutable
+                (
+                    (newAlert.Message != oldAlert.Message || newAlert.Area != oldAlert.Area) && //different content (message/area)
+                    oldAlert.Status != STATUS.DRAFT                                             //forbidden case: if !DRAFT
+                ) || (
+                    !Enum.IsDefined(typeof(STATUS), newAlert.Status) || //new status out of range
+
+                    (oldAlert.Status == STATUS.DRAFT     && newAlert.Status == STATUS.CANCELLED) || //forbidden case: DRAFT     => CANCELLED
+                    (oldAlert.Status == STATUS.PUBLISHED && newAlert.Status == STATUS.DRAFT    ) || //forbidden case: PUBLISHED => DRAFT
+                    (oldAlert.Status == STATUS.CANCELLED && newAlert.Status != STATUS.CANCELLED)    //forbidden case: CANCELLED => !CANCELLED
+                )
+            ){ return BadRequest(); }
+
+            //set marker "has been modified at least once"
+            _context.Entry(newAlert).State = EntityState.Modified;
+
+            //try saving to database
+            try{
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AlertExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
+            //modifications occured in DB in the meantime => our request can be outdated
+            }catch (DbUpdateConcurrencyException){
+                if (!AlertExists(oldID)){
+                    return NotFound(); //ID was not in use yet => new item to be PUT => no sync problems then
+                }else{
+                    throw; //otherwise => report potential problem to user!
+                }
+            }
             return NoContent();
         }
+
+
 
         // POST: api/Alert
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Alert>> PostAlert(Alert alert)
-        {
+        public async Task<ActionResult<Alert>> PostAlert(Alert alert) {
+
+			//set initial attributes
+            alert.ID        = lastID++;
+            alert.Status    = STATUS.DRAFT;
+            alert.CreatedAt = DateOnly.FromDateTime(DateTime.Now);
+
+            Console.WriteLine($"ADDING WITH NEW ID:{alert.ID}");
+
+            //add a new alert
             _context.Alerts.Add(alert);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAlert", new { id = alert.ID }, alert);
+            //feedback
+            return CreatedAtAction("GetAlert", alert);
         }
+
+
 
         // DELETE: api/Alert/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAlert(int id)
-        {
+        public async Task<IActionResult> DeleteAlert(int id) {
             var alert = await _context.Alerts.FindAsync(id);
-            if (alert == null)
-            {
-                return NotFound();
-            }
 
+            //not found
+            if (alert == null) { return NotFound(); }
+
+            //delete
             _context.Alerts.Remove(alert);
             await _context.SaveChangesAsync();
-
             return NoContent();
         }
 
-        private bool AlertExists(int id)
-        {
+
+
+        //tools
+        private bool AlertExists(int id) {
             return _context.Alerts.Any(e => e.ID == id);
         }
     }
