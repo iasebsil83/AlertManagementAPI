@@ -1,0 +1,41 @@
+#!/bin/bash
+
+
+
+# ---------------- INIT ----------------
+
+#exit on err
+set -o errexit
+
+#cur exe dir
+CXD=$(dirname $(readlink -f $0))
+pCXD=$(dirname $CXD)
+
+#dirs
+CFG=$pCXD/cfg
+SRC=$pCXD/src
+TMP=$pCXD/tmp
+
+
+
+
+# ---------------- EXECUTION ----------------
+
+#reset prev builds
+rm --recursive --force $TMP
+mkdir                  $TMP
+
+#build cfg
+cp $CFG/AlertManagementAPI.csproj $TMP/
+cp $CFG/appsettings.json          $TMP/
+cp $CFG/dotnet-obj                $TMP/obj --recursive
+mkdir                             $TMP/Properties
+cp $CFG/launchSettings.json       $TMP/Properties/
+
+#build src
+for fse in $(ls $SRC); do
+    ln --symbolic ../src/$fse $TMP/
+done
+
+#end msg
+echo "Project built with success"

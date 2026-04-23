@@ -8,20 +8,10 @@
 CXD=$(dirname $(readlink -f $0))
 pCXD=$(dirname $CXD)
 
-#tmp dir
-TMP=$pCXD/tmp
-
 
 
 
 # ---------------- EXECUTION ----------------
 
-#run in temporary directory
-if [[ ! -e $TMP ]]; then
-    echo "run: Project must be built before running."
-    exit 1
-fi
-
-#run
-cd $TMP
-dotnet run
+#clean
+rm --recursive --force $pCXD/tmp

@@ -1,3 +1,7 @@
+### [2026-04-23-14-10] NEWBRANCH new-prj-arch
+- Made a new architecture for the project.
+
+
 ### [2026-04-23-13-44]
 - Added a few tests commands in a `tst` directory.
 

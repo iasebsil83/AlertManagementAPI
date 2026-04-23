@@ -47,19 +47,10 @@ Here are the requirements to **run** the project:
 
 ### Execution process
 
-To run the project, just run:
+To run the project, you first have to **build** it (next section).\
+Then, just run:
 ```bash
 app/run
-```
-
-&nbsp;
-
-### Clean
-
-After execution, some debug directories and files may be created.\
-Clean them using the `clean` tool:
-```
-app/clean
 ```
 
 &nbsp;
@@ -78,12 +69,28 @@ For precise usage of the API in itself, see document(s) in the `doc/` directory.
 
 ### Build requirements
 
-No build process, everything is directly handled by the DotNet SDK.
+Here are all the requirements to build the project:
+- Bash
+- DotNet SDK, version 10.0
+
 &nbsp;
 
 ### Build process
 
-No build process.
+To build the project, just run:
+```bash
+bld/build
+```
+
+&nbsp;
+
+### Clean
+
+To clean build generation and temporary runtime files, run:
+```bash
+bld/clean
+```
+
 &nbsp;
 &nbsp;
 
