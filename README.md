@@ -28,8 +28,6 @@ This project produces no downloadable binaries yet.
 For more simplicity, this project has been re-organized into a simpler structure then the original ".NET" one.\
 You should find your way easily with directories `app`, `cfg`, `src` and `tst` to configure, edit, execute and test the project.
 
-Forget about the `dotnet-working-dir` that will only be used at run time.
-
 &nbsp;
 &nbsp;
 

@@ -1,3 +1,8 @@
+### [2026-04-23-14-10]
+- Added a build process and removed some cfg files.\
+  No more mess in project structure.
+
+
 ### [2026-04-23-14-10] NEWBRANCH new-prj-arch
 - Made a new architecture for the project.
 
