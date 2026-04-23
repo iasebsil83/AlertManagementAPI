@@ -18,7 +18,7 @@ An alert is a structured item with the following attributes:
   Text, given by **user** at creation, mutable under condition
 - a  <ins>status</ins>:\
   Integer, given by **API** at creation, mutable under condition
-- a  <ins>createdAt<ins>:\
+- a  <ins>createdAt</ins>:\
   Date, given by **API** at creation, immutable
 
 &nbsp;
@@ -33,12 +33,12 @@ The **status** attribute can only have values 0, 1 or 2, corresponding\
 respectivelly to alert states "DRAFT", "PUBLISHED" and "CANCELLED".\
 At creation, it is set to DRAFT.
 
-An alert in DRAFT status can only be modified into PUBLISHED or remain unchanged.
-An alert in PUBLISHED status can only be modified to CANCELLED or remain unchanged.
+An alert in DRAFT status can only be modified into PUBLISHED or remain unchanged.\
+An alert in PUBLISHED status can only be modified to CANCELLED or remain unchanged.\
 An alert in CANCELLED status can't be modified.
 
-The **Message** and **Area** attributes can only be modified if status is DRAFT.
-If the status is being modified at the same time (in the same request), we consider the **old** status as reference.
+The **Message** and **Area** attributes can only be modified if status is DRAFT.\
+If the status is being modified at the same time (in the same request), we consider the **old** status as reference.\
 The only case it can happen here is `DRAFT => PUBLISHED`, modifications are allowed then.
 
 &nbsp;
@@ -78,6 +78,7 @@ To get a specific alert by id, use a **POST** with URL path suffix `/api/Alert` 
 - status
 - area
 - createdAt
+
 They are all optional and the API will override the values that are not the be set by the user actually.
 
 &nbsp;
@@ -90,12 +91,12 @@ To modify a specific alert by id, use a **PUT** with URL path suffix `/api/Alert
 - status
 - area
 - createdAt
+
 They are all optional but the API may refuse some modifications depending on the rules explained before.
 
 &nbsp;
 
 ### Delete an individual alert by ID
-
 
 To delete a specific alert by id, use a **DELETE** with URL path suffix `/api/Alert/#id#`.
 

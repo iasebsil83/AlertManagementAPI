@@ -10,10 +10,10 @@
 ### [2026-04-23-13-44]
 - Added a few tests commands in a `tst` directory.
 
-- Tested if DELETE causes problem with ID: **it does**
-  Primary keys are never reset, but our instances do reset every time...
-  It is **very annoying**!!! How are we supposed to work with such an environment!
-  Anyway, I also figured out that PUT requests were having the same kind of "ID" issue.
+- Tested if DELETE causes problem with ID: **it does**\
+  Primary keys are never reset, but our instances do reset every time...\
+  It is **very annoying**!!! How are we supposed to work with such an environment!\
+  Anyway, I also figured out that PUT requests were having the same kind of "ID" issue.\
   => Too much pain for getting information about this **mysterious** `InMemory` database => stopping project here.
 
 
@@ -161,7 +161,7 @@
   Sources are:
   - `Program.cs`
   - `WeatherForecast.cs`
-  - `Controllers/WeatherForecastController.cs`
+  - `Controllers/WeatherForecastController.cs`\
   Some `Debug` directories have been addded to the project under different directories.\
   They contain a **lot** of messy things => cleaning them using:
   ```
