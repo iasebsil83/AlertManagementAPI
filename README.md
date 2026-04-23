@@ -22,6 +22,15 @@ This project is made exclusively using [.NET](https://dotnet.microsoft.com/en-us
 This project produces no downloadable binaries yet.
 
 &nbsp;
+
+### Project Structure
+
+For more simplicity, this project has been re-organized into a simpler structure then the original ".NET" one.\
+You should find your way easily with directories `app`, `cfg`, `src` and `tst` to configure, edit, execute and test the project.
+
+Forget about the `dotnet-working-dir` that will only be used at run time.
+
+&nbsp;
 &nbsp;
 
 
@@ -38,9 +47,9 @@ Here are the requirements to **run** the project:
 
 ### Execution process
 
-To run the project, open a terminal in project location and write:
+To run the project, just run:
 ```bash
-dotnet run
+app/run
 ```
 
 &nbsp;
@@ -50,7 +59,7 @@ dotnet run
 After execution, some debug directories and files may be created.\
 Clean them using the `clean` tool:
 ```
-./clean
+app/clean
 ```
 
 &nbsp;

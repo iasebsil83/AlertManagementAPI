@@ -1,0 +1,9 @@
+#!/bin/bash
+
+#cur exe dir
+CXD=$(dirname $(readlink -f $0))
+pCXD=$(dirname $CXD)
+
+#run
+cd $pCXD/dotnet-working-dir
+rm $(find -type d -name Debug) -rf
